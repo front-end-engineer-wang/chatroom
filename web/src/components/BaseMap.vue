@@ -27,7 +27,6 @@
         </div>
         <div id="wangedit"  ref="wangedit" class="sendMes"></div>
         <el-button class="sendButton" @click="sendMessage" type="success">发送</el-button>
-
       </el-col>
     </el-row>
    
@@ -209,7 +208,6 @@ export default {
     socket.off('messageroomReach');
     this.$bus.$off("getImg")
     this.$bus.$off("message-room")
-
   },
   
 };
@@ -248,8 +246,9 @@ export default {
   display: flex;
   height: 100%;
   flex-direction: column;
+  justify-content: space-between;
   .messageView{
-    max-height: 380px;
+    max-height: calc(100vh - 335px);
     overflow-x: hidden;
     overflow-y: auto;
     flex: 5;
@@ -261,8 +260,8 @@ export default {
     } 
   }
   .sendMes{
-    flex: 2;
-    height: 200px;
+    // flex: 2;
+    height: 193px;
   }
   .sendButton{
     position: absolute;
