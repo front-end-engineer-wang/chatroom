@@ -25,7 +25,7 @@ export default {
   name: "Home",
   created() {
     // localStorage里面没有token就跳到登录页
-    if (localStorage.getItem('token') == "") {
+    if (!localStorage.getItem('token')) {
       this.$router.push("/login");
     }
     
