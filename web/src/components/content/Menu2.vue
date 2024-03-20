@@ -77,7 +77,7 @@ export default {
       inputMes: "你好",
       messageList: {},
       sendid: "",
-      userName: sessionStorage.getItem("user_name"),
+      userName: localStorage.getItem("user_name"),
       firstIn: true,
       imgSrc: "",
       roomimgSrc: [],
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     getRoomList() {
-      api.getRoomList(sessionStorage.getItem("userid")).then((res) => {
+      api.getRoomList(localStorage.getItem("userid")).then((res) => {
         this.roomList = res.data;
         this.activeroomid = this.roomList[0]?.room_id;
         this.getMessage();

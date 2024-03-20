@@ -54,7 +54,7 @@ export default {
         })
         let data = {
           room_name: this.chatRoomName,
-          room_creat:sessionStorage.getItem('userid'),
+          room_creat:localStorage.getItem('userid'),
           userList:userList,
         }
         api.createRoom(data).then(res=>{

@@ -45,14 +45,14 @@ export default {
       this.friendName &&
         api.searchFriends(this.friendName).then((res) => {
           this.resultList = res.data.filter(item=>{  //排除自己
-              return item.user_name != sessionStorage.getItem("user_name")
+              return item.user_name != localStorage.getItem("user_name")
           });
         });
     },
     //添加请求
     sentRequest(name){
         let params = {
-            request_send: sessionStorage.getItem("user_name"),
+            request_send: localStorage.getItem("user_name"),
             request_accept:name,
         }
         api.sentRequest(params).then(res=>{

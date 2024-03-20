@@ -45,7 +45,7 @@ export default {
       activeFriend:'',
       messageList:{},
       sendid:'',
-      userName: sessionStorage.getItem("user_name"),
+      userName: localStorage.getItem("user_name"),
       firstIn : true,
       imgSrc:'',
       friendimgSrc:[],
@@ -57,7 +57,7 @@ export default {
     socket = io(this.SOCKET_BASEURL, {
       reconnectionDelayMax: 10000,
       query: {
-        "my-key": sessionStorage.getItem('user_name')
+        "my-key": localStorage.getItem('user_name')
       },
       cors:true
     });
@@ -138,15 +138,15 @@ export default {
     },
     //获取好友列表
     getFriends(){
-      api.getFriends(sessionStorage.getItem('user_name')).then(res=>{
+      api.getFriends(localStorage.getItem('user_name')).then(res=>{
         this.friendList =  res.data || [];
         this.activeFriend = this.activeFriend || this.friendList[0]?.friend_name
         this.$store.commit('setFriendList',this.friendList)
         if(this.firstIn){
           this.getMessage()
           this.getFriendImg()
-          this.userid = sessionStorage.getItem('userid')
-          sessionStorage.setItem('userid',this.userid +'')
+          this.userid = localStorage.getItem('userid')
+          localStorage.setItem('userid',this.userid +'')
           api.getImg({id:this.userid+''}).then(res=>{
             this.imgSrc = 'data:image/jpg;base64,' + res.data[0] // base64方式，需要手动拼接前缀或者由后端拼好直接显示
             this.$bus.$emit('getImg',{src:this.imgSrc})
@@ -160,7 +160,7 @@ export default {
       this.friendList.forEach(item=>{
         this.messageList[item.friend_name] = []
       })
-      api.getMessage(sessionStorage.getItem('userid')).then(res=>{
+      api.getMessage(localStorage.getItem('userid')).then(res=>{
         res.data.friendsMessage.forEach(item=>{
           if(item.message_sent == this.userName){
             this.messageList[item.message_receive].push({

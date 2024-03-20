@@ -60,8 +60,8 @@ export default {
             if (res.data.success == true) {
               //密码正确
               localStorage.setItem("token", res.data.data.token); //localStorage设置token
-              sessionStorage.setItem("user_name", this.user.username); //sessionStorage设置user_name
-              sessionStorage.setItem("userid", res.data.data.user_id); //sessionStorage设置user_id
+              localStorage.setItem("user_name", this.user.username); //localStorage设置user_name
+              localStorage.setItem("userid", res.data.data.user_id); //localStorage设置user_id
               this.$router.push("/base");
             } else {
               //密码错误

@@ -109,8 +109,8 @@ export default {
               //密码正确
               this.$message("注册成功");
               localStorage.setItem("token", 'token'); //localStorage设置token
-              sessionStorage.setItem("user_name", this.user.username); //sessionStorage设置user_name
-              sessionStorage.setItem("userid", this.imageId); //sessionStorage设置user_id
+              localStorage.setItem("user_name", this.user.username); //localStorage设置user_name
+              localStorage.setItem("userid", this.imageId); //localStorage设置user_id
               this.$router.push("/base");
             } else {
               this.$message({

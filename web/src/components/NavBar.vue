@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       activeIndex: "1", //第一次进去是模块一
-      name:sessionStorage.getItem("user_name"),
+      name:localStorage.getItem("user_name"),
       img_url:'',
     };
   },

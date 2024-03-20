@@ -29,7 +29,7 @@ export default {
   methods: {
       //获取添加申请
     getFriendRequset(){
-      api.getFriendRequset(sessionStorage.getItem("user_name")).then(res=>{
+      api.getFriendRequset(localStorage.getItem("user_name")).then(res=>{
         this.requestList = res.data
         console.log(this.requestList );
         this.$forceUpdate()
@@ -38,7 +38,7 @@ export default {
     //同意好友
     acceptFriend(name){
       api.acceptFriend({
-        request_accept:sessionStorage.getItem("user_name"),
+        request_accept:localStorage.getItem("user_name"),
         request_send:name
       }).then(()=>{
         this.$message.success('添加成功')
@@ -50,7 +50,7 @@ export default {
     //拒绝好友
     refuseFriend(name){
       api.refuseFriend({
-        request_accept:sessionStorage.getItem("user_name"),
+        request_accept:localStorage.getItem("user_name"),
         request_send:name
       }).then(this.getFriendRequset)
     },
