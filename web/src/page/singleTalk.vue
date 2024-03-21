@@ -73,7 +73,6 @@ export default {
     let editor = this.editor
     editor.config.menus = [
         'emoticon',
-        'image'
     ]
     editor.config.placeholder = '请输入'  
     editor.create()
@@ -218,10 +217,10 @@ export default {
 #singleTalk{
   height: 90%;
   margin: 24px;
-  border: 1px solid rgb(10, 44, 235);
+  border: 1px solid rgb(26, 31, 1);
 }
 #friendsList{
-  border-right: 2px solid rgb(23, 7, 247);
+  border-right: 1px solid rgb(26, 31, 1);
   height: 100%;
   .friendListTitle{
     display: block;

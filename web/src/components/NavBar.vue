@@ -38,12 +38,12 @@ export default {
             icon: "el-icon-s-home",
           },
           {
-            index: "/menu1",
+            index: "/addFriend",
             name: "添加好友",
             icon: "el-icon-user",
           },
           {
-            index: "/menu4",
+            index: "/friendApplication",
             name: "好友申请",
             icon: "el-icon-user",
           },
@@ -53,12 +53,12 @@ export default {
       if (index == 2) {  //模块2菜单
         let menu = [
           {
-            index: "/menu2",
+            index: "/chatroom",
             name: "聊天室",
             icon: "el-icon-s-home",
           },
           {
-            index: "/menu3",
+            index: "/creatChatroom",
             name: "新建聊天室",
             icon: "el-icon-user",
           },

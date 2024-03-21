@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import api from "../../network/home";
+import api from "../network/home";
 
 export default {
   data() {

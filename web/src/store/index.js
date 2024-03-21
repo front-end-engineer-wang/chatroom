@@ -12,11 +12,11 @@ export default new Vuex.Store({
       name:'我的好友',
       icon:'el-icon-s-home'
     },{
-      index:'/menu1',
+      index:'/addFriend',
       name:'添加好友',
       icon:'el-icon-user'
     },{
-      index: "/menu4",
+      index: "/friendApplication",
       name: "好友申请",
       icon: "el-icon-user",
     }],
