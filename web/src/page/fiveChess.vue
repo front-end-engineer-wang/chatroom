@@ -3,7 +3,7 @@
     <h3 ref="title" class="title">--五子棋--</h3>
     <canvas class="chess" width="450px" height="450px"></canvas>
     <div>
-      <a class="res">restart</a>
+      <a ref="restartBtn" class="res">restart</a>
     </div>
   </div>
 </template>
@@ -18,13 +18,12 @@ export default {
   mounted() {
     let chess = document.getElementsByClassName('chess')[0];//获取chess画布
     let title = this.$refs.title;//获取标题
+    let restartBtn = this.$refs.restartBtn;//获取标题
     // 获取2d画布的上下文
     let cxt = chess.getContext("2d");
     // 线的颜色
     cxt.strokeStyle = "#b9b9b9";
-    window.onload = function () {
-      drawChessBoard();
-    }
+    drawChessBoard();
     function drawChessBoard() {
       for (let i = 0; i < 15; i++) {
         // 从canvas画布位置开始计算
@@ -97,6 +96,7 @@ export default {
       }
     }
 
+    restartBtn.onclick = restart
     // 定义二维数组来存储每个坐标是否已经下了棋子
     let chessBoard = new Array(15).fill(0).map(() => new Array(15).fill(0));
     // 人下棋
@@ -238,6 +238,19 @@ export default {
       }
       cxt.fillStyle = color;
       cxt.fill();
+    }
+    // 初始化
+    function restart() {
+      chessBoard = new Array(15).fill(0).map(() => new Array(15).fill(0));
+      // 人下棋
+      me = true;//用来标记人是否可以下棋
+      over = false;//标记游戏是否结束
+      myWin = new Array(572).fill(0);//记录用户在每个赢法编号上的分值
+      computerWin = new Array(572).fill(0);//记录计算机在每个赢法编号上的分值
+      cxt.clearRect(0,0,1000,1000)
+      cxt.beginPath()
+      drawChessBoard()
+      title.innerHTML = "--五子棋--"
     }
   },
   methods: {
