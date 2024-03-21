@@ -35,6 +35,11 @@ const routes = [
         name:"singleTalk",
         component: () => import("../page/singleTalk.vue"),
       },
+      {
+        path:"/fiveChess",
+        name:"fiveChess",
+        component: () => import("../page/fiveChess.vue"),
+      },
     ],
   },
   {

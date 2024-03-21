@@ -12,6 +12,7 @@
       <el-menu-item class="menu-null"></el-menu-item>
       <el-menu-item index="1">私聊</el-menu-item>
       <el-menu-item index="2">聊天室</el-menu-item>
+      <el-menu-item index="3">小游戏</el-menu-item>
       <el-menu-item class="menu-user">
         <img :src="img_url" alt="" /><span>{{name}}</span>
       </el-menu-item>
@@ -61,6 +62,16 @@ export default {
             index: "/creatChatroom",
             name: "新建聊天室",
             icon: "el-icon-user",
+          },
+        ];
+        this.$store.commit("changeMenu", { menu });
+      }
+      if (index == 3) {  //模块2菜单
+        let menu = [
+          {
+            index: "/fiveChess",
+            name: "五子棋",
+            icon: "el-icon-s-home",
           },
         ];
         this.$store.commit("changeMenu", { menu });
