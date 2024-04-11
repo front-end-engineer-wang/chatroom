@@ -10,6 +10,7 @@
         <el-button icon="el-icon-check" v-if="item.request_status ==2" disabled type="success">已同意</el-button>
         <el-button icon="el-icon-delete" v-if="item.request_status ==3" type="danger">已拒绝</el-button>
       </div>
+
     </div>
   </div>
 </template>
@@ -69,6 +70,8 @@ export default {
   position: relative;
   left: 50px;
   top: 50px;
+  overflow-y: scroll;
+  padding: 0;
 }
 .searchList {
   box-sizing: border-box;

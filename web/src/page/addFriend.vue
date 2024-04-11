@@ -42,7 +42,7 @@ export default {
   methods: {
     //查找用户
     search() {
-      this.friendName &&
+      // this.friendName &&
         api.searchFriends(this.friendName).then((res) => {
           this.resultList = res.data.filter(item=>{  //排除自己
               return item.user_name != localStorage.getItem("user_name")
@@ -69,6 +69,9 @@ export default {
         this.$bus.$emit('gotoChat',{name:name})
     }
   },
+  created(){
+    this.search()
+  },
   beforeDestroy(){
     this.$bus.$off("gotoChat")
   }
@@ -83,6 +86,11 @@ export default {
   position: relative;
   left: 50px;
   top: 50px;
+  overflow: hidden;
+}
+.resultList{
+  height: 100%;
+  overflow: scroll;
 }
 .searchList {
   box-sizing: border-box;

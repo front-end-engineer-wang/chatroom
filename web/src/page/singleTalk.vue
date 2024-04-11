@@ -225,16 +225,19 @@ export default {
   .friendListTitle{
     display: block;
     text-align: center;
+    height: 50px;
+    line-height: 50px;
+    background-color: rgba(14, 170, 175, 0.822);
   }
   .friendListItem{
     display: block;
     text-align: center;
-    height: 35px;
-    line-height: 35px;
+    height: 55px;
+    line-height: 55px;
   }
   .friendListItem:hover {
-    background-color: rgba(214, 132, 132, 0.822);
     cursor: pointer;
+    background-color: rgba(214, 132, 132, 0.822);
   }
   .activeFriend{
     background-color: rgba(214, 132, 132, 0.822);
