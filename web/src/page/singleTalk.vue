@@ -1,6 +1,6 @@
 <template>
   <div id="singleTalk">
-    <el-row style="height: 100%">
+    <el-row style="height: 100%;">
       <el-col id="friendsList" :span="6">
         <ul>
           <li class="friendListTitle">我的好友</li>
@@ -26,11 +26,19 @@
           </ul>
         </div>
         <div id="wangedit"  ref="wangedit" class="sendMes"></div>
+        <el-button class="sendButton1" @click="webRtc" type="success">视频通话</el-button>
         <el-button class="sendButton" @click="sendMessage" type="success">发送</el-button>
       </el-col>
     </el-row>
-   
-
+    <div v-if="isShowModal" class="videoModal">
+      <div v-if="isShowModalText" class="videoText">
+        等待对方回应中
+        <el-button @click="cancelVideoButton" type="success">取消</el-button>
+      </div>
+      <video id="local" class="videoLocal" autoplay playsinline muted></video>
+      <video id="remote" class="videoRemove" autoplay playsinline></video>
+    </div>
+    
   </div>
 </template>
 <script>
@@ -38,6 +46,8 @@ import api from "../network/home"
 import E from 'wangeditor'
 import { io } from "socket.io-client";
 let socket = null;
+import 'webrtc-adapter'
+
 export default {
   data() {
     return {
@@ -51,6 +61,12 @@ export default {
       friendimgSrc:[],
       userid:'',
       editor:{},
+      //视频通话
+      pc:'',
+      isShowModal:false,
+      isShowModalText:false,
+      hasEmitOffer: false,
+      hasEmitAnswer: false,
     };
   },
   created () {
@@ -67,6 +83,13 @@ export default {
     this.$bus.$on('gotoChat', function(value) {
         self.changeFriend(value.name);
     });
+    this.pc = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: 'stun:stun.voipbuster.com ',
+        },
+      ],
+    })
   },
   mounted() {
     this.editor = new E('#wangedit')
@@ -91,6 +114,20 @@ export default {
       this.$forceUpdate()
       this.scrollToBottom()
     })
+
+    // rtc相关
+
+    // 收到offer,创建answer
+    socket.on('offer', (data) => {
+      console.log("**offer***", data);
+      this.createAnswer(data.sdp)
+    })
+    // 收到answer,设置远端sdp
+    socket.on('answer', (data) => {
+      console.log("***answer**", data);
+      this.addAnswer(data.sdp)
+    })
+
     this.getFriends()
     this.$bus.$on('message-room',function(res){
       socket.emit('messageroom',res)
@@ -198,17 +235,121 @@ export default {
       this.$nextTick(() => {
         this.$refs.messageView.scrollTop = this.$refs.messageView.scrollHeight
       });
-    } 
+    },
+    async webRtc(){
+      await this.webRtcInit()
+      this.createOffer()
+    },
+    async webRtcInit (){
+      this.isShowModal = true
+      return new Promise((resolve) =>{
+        this.$nextTick(async () =>{
+          const pc = this.pc
+          // 获取本地端视频标签
+          const localVideo = document.getElementById('local')
+          // 获取远程端视频标签
+          const remoteVideo = document.getElementById('remote')
+
+          // 采集本地媒体流
+          const localStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+          })
+          // 设置本地视频流
+          localVideo.srcObject = localStream
+
+          // 添加本地媒体流的轨道都添加到 RTCPeerConnection 中
+          localStream.getTracks().forEach((track) => {
+            pc.addTrack(track, localStream)
+          })
+
+          // 监听远程流：
+          const remoteStream = new MediaStream()
+          pc.ontrack = (event) => {
+            event.streams[0].getTracks().forEach((track) => {
+              remoteStream.addTrack(track)
+            })
+            // 设置远程视频流
+            remoteVideo.srcObject = remoteStream
+          }
+          resolve()
+        })
+      })
+      
+      
+    },
+    async createOffer(){
+      const pc = this.pc
+      // 创建 offer
+      const offer = await pc.createOffer()
+      // 设置本地描述
+      await pc.setLocalDescription(offer)
+      pc.onicecandidate = (event) => {
+        if (event.candidate  && !this.hasEmitOffer) {
+          console.log("emitoffer");
+          socket.emit('offer', {
+            userName: this.activeFriend,
+            sdp: pc.localDescription,
+          })
+          this.hasEmitOffer = true
+        }
+      }
+      pc.oniceconnectionstatechange = () => {
+        console.log(`ICE connection state: ${pc.iceConnectionState}`);
+      };
+      this.isShowModal = true
+    },
+
+    async createAnswer (offer){
+      await this.webRtcInit()
+      const pc = this.pc
+      pc.onicecandidate = async (event) => {
+        // Event that fires off when a new answer ICE candidate is created
+        if (event.candidate && !this.hasEmitAnswer) {
+          socket.emit('answer', {
+            userName: this.activeFriend,
+            sdp: pc.localDescription,
+          })
+          this.hasEmitAnswer = true
+          this.isShowModalText = false
+        }
+      }
+      await pc.setRemoteDescription(offer)
+      const answer = await pc.createAnswer()
+      await pc.setLocalDescription(answer)
+    },
+    async addAnswer(answer){
+      const pc = this.pc
+      if (!pc.currentRemoteDescription) {
+        pc.setRemoteDescription(answer)
+        this.isShowModalText = false
+      }
+    },
+    cancelVideoButton(){
+      console.log("111111");
+      this.isShowModal = false
+      this.hasEmitOffer = false
+      this.hasEmitAnswer = false
+      this.isShowModalText = false
+      // 获取本地端视频标签
+      const localVideo = document.getElementById('local')
+      // 获取远程端视频标签
+      const remoteVideo = document.getElementById('remote')
+      localVideo.srcObj = null
+      remoteVideo.srcObj = null
+    }
   },
   beforeDestroy () {
     socket.off('messageSucess');
     socket.off('error');
     socket.off('messageReach');
     socket.off('messageroomReach');
+    socket.off('offer');
+    socket.off('answer');
+    socket.disconnect()
     this.$bus.$off("getImg")
     this.$bus.$off("message-room")
   },
-  
 };
 </script>
 
@@ -272,6 +413,13 @@ export default {
     right: 0;
     z-index: 99999;
   }
+  .sendButton1{
+    position: absolute;
+    width: 120px;
+    bottom: 0;
+    right: 80px;
+    z-index: 99999;
+  }
 }
 .leftSide{
   display: inline-block;
@@ -310,4 +458,32 @@ export default {
   top: -302px;
   margin-left:0 !important;
 }
+.videoModal{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+}
+.videoLocal{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20vw;
+  height: 30vh;
+}
+.videoRemove{
+  width: 60vw;
+  height: 70vh;
+}
+.videoText{
+  color: #fff;
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
 </style>

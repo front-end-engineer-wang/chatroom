@@ -4,10 +4,11 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'p7?alAs->5O&',
-  database: '聊天系统'
+  password: '888',
+  database: 'chatroom'
 });
 connection.connect();
+
 //连接socket
 const express = require('express');
 const app = express();
@@ -27,6 +28,8 @@ connection.query('select user_id,user_name from user',(err,res)=>{
   }
 })
 io.on('connection', (socket) => {
+  console.log(Object.keys(socketList).length, "******");
+  
   let key = socket.handshake.query['my-key']   //连接的参数--用户名
   socketList[key] = socket
   socket.on('message', (msg) => {
@@ -57,6 +60,7 @@ io.on('connection', (socket) => {
     
   });
   socket.on('disconnect',()=>{
+    console.log('disconnect');
     socketList[key] = null
   });
   socket.on('messageroom', (msg) => {
@@ -82,6 +86,16 @@ io.on('connection', (socket) => {
     //存入数据库
     connection.query(`INSERT INTO message_room (message_sent,message_receive,message_value,message_type) VALUES (${id},${msg.reciveRoom},'${msg.content}','${msg.messageType}')`)
   })
+  // webrtc相关
+  socket.on('offer', (data) => {
+    console.log('offer');
+    socketList[data.userName].emit('offer', data)
+  })
+  // 用户发送 answer
+  socket.on('answer', (data) => {
+    console.log('answer');
+    socketList[data.userName].emit('answer', data)
+  })
 });
 server.listen(3030, () => {
 });
@@ -94,7 +108,7 @@ export class AppService {
     return new Promise((resolve, rej) => {
       let str = `SELECT * from user where user_name='${loginInfo.username}'`    
       connection.query(str, (error, results, fields) => {
-        if (results.length === 1) {
+        if (results?.length === 1) {
           let id = Object.keys(usernameMap).find(item=>{
             return usernameMap[item] == loginInfo.username
           })

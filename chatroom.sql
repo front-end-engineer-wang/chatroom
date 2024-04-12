@@ -59,7 +59,7 @@ CREATE TABLE `message_friends` (
   `message_id` bigint NOT NULL AUTO_INCREMENT,
   `message_sent` bigint NOT NULL,
   `message_receive` bigint NOT NULL,
-  `message_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `message_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `message_type` varchar(255) NOT NULL,
   `message_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`message_id`)
@@ -80,7 +80,7 @@ CREATE TABLE `message_room` (
   `message_id` bigint NOT NULL AUTO_INCREMENT,
   `message_sent` bigint DEFAULT NULL,
   `message_receive` bigint DEFAULT NULL,
-  `message_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `message_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `message_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `message_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`message_id`)
