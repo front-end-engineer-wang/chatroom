@@ -88,6 +88,11 @@ export default {
         {
           urls: 'stun:stun.voipbuster.com ',
         },
+        {
+          urls: 'turn:stun.8.138.112.46:3478',
+          username: "admin",
+          credential: "123456",
+        }
       ],
     })
   },
