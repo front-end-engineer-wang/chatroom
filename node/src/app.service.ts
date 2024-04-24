@@ -89,11 +89,17 @@ io.on('connection', (socket) => {
   // webrtc相关
   socket.on('offer', (data) => {
     console.log('offer');
+    if(!socketList[data.userName]) {
+      return
+    }
     socketList[data.userName].emit('offer', data)
   })
   // 用户发送 answer
   socket.on('answer', (data) => {
     console.log('answer');
+    if(!socketList[data.userName]) {
+      return
+    }
     socketList[data.userName].emit('answer', data)
   })
 });
@@ -144,8 +150,9 @@ export class AppService {
     })
   }
    //获取聊天室聊天记录
-   getRoomMessage(id){
-    let str = `SELECT * from message_room where message_sent = ${id}`
+  getRoomMessage(roomList){
+    const ids =  roomList.map(item=> item.room_id ).join(",") || -1
+    let str = `SELECT * from message_room where message_receive in (${ids})`
     return new Promise((resolve, rej) => {
       connection.query(str, (error, results, fields) => {  
         results?.forEach(item=>{

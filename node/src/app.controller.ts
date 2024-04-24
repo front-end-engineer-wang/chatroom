@@ -175,7 +175,8 @@ export class AppController {
   @Header('Access-Control-Allow-Origin', '*')
   async getMessage(@Query() id) {
     let msg = await this.appService.getFriendsMessage(id.id)
-    let msg1 = await this.appService.getRoomMessage(id.id)
+    let roomList = await this.appService.getRoomList(id.id)
+    let msg1 = await this.appService.getRoomMessage(JSON.parse(roomList+''))
     return {
       friendsMessage:JSON.parse(msg+''),
       roomMessage:JSON.parse(msg1+'')
