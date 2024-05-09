@@ -21,12 +21,20 @@
 </template>
 
 <script>
+const pathEunm = {
+  '/addFriend':'1',
+  '/base':'1',
+  '/friendApplication':'1',
+  '/chatroom':'2',
+  '/creatChatroom':'2',
+  '/fiveChess':'3',
+}
 export default {
   data() {
     return {
-      activeIndex: "1", //第一次进去是模块一
+      activeIndex: pathEunm[this.$route.path],
       name:localStorage.getItem("user_name"),
-      img_url:'',
+      img_url:`${this.BASEURL}/static/userImg/${localStorage.getItem("userid")}.png`,
     };
   },
   methods: {
@@ -79,10 +87,7 @@ export default {
     },
   },
   created () {
-    var self = this
-    this.$bus.$on('getImg', function(res) {
-        self.img_url = res.src;
-    });
+    this.changeMenu(pathEunm[this.$route.path])
   },
 };
 </script>

@@ -89,7 +89,7 @@ export default {
   overflow: hidden;
 }
 .resultList{
-  height: 100%;
+  height: 90%;
   overflow: scroll;
 }
 .searchList {

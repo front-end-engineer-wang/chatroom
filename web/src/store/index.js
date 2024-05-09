@@ -6,20 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userinfo:{},
-    currentpath:'/base',   //当前的路由路径
-    currentmenu:[{
-      index:'/base',
-      name:'我的好友',
-      icon:'el-icon-s-home'
-    },{
-      index:'/addFriend',
-      name:'添加好友',
-      icon:'el-icon-user'
-    },{
-      index: "/friendApplication",
-      name: "好友申请",
-      icon: "el-icon-user",
-    }],
+    currentmenu:[],
     friendList:[],   //好友列表
     RoomMessage:[],
   },

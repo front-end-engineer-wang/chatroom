@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       user: {
-        username: "wcq",
+        username: "",
         password: "123", 
       },
     };

@@ -151,6 +151,7 @@ export default {
     changeFriend(name){
       this.activeFriend = name
       this.$forceUpdate()
+      this.scrollToBottom()
     },
 
     //发送消息
@@ -186,12 +187,10 @@ export default {
         if(this.firstIn){
           this.getMessage()
           this.getFriendImg()
-          this.userid = localStorage.getItem('userid')
-          localStorage.setItem('userid',this.userid +'')
-          api.getImg({id:this.userid+''}).then(res=>{
-            this.imgSrc = 'data:image/jpg;base64,' + res.data[0] // base64方式，需要手动拼接前缀或者由后端拼好直接显示
-            this.$bus.$emit('getImg',{src:this.imgSrc})
-          })
+          // api.getImg({id:this.userid+''}).then(res=>{
+          //   this.imgSrc = 'data:image/jpg;base64,' + res.data[0] // base64方式，需要手动拼接前缀或者由后端拼好直接显示
+          //   this.$bus.$emit('getImg',{src:this.imgSrc})
+          // })
           this.firstIn = false;
         }
       })
@@ -225,13 +224,6 @@ export default {
       this.friendList?.forEach((item)=>{
         this.friendimgSrc[item.friend_name] = `${this.BASEURL}/static/userImg/${item.user_img}.png`
       })  
-    },
-
-    handleAvatarSuccess(res, file) {
-      console.log(res);
-      this.imageId = res.img_id
-      console.log(this.imageId );
-      this.imageUrl = window.URL.createObjectURL(file.raw);
     },
     /**
      * 滚动到底部
@@ -331,7 +323,6 @@ export default {
       }
     },
     cancelVideoButton(){
-      console.log("111111");
       this.isShowModal = false
       this.hasEmitOffer = false
       this.hasEmitAnswer = false
@@ -352,7 +343,6 @@ export default {
     socket.off('offer');
     socket.off('answer');
     socket.disconnect()
-    this.$bus.$off("getImg")
     this.$bus.$off("message-room")
   },
 };
