@@ -13,7 +13,7 @@
         <i class="el-icon-menu" @click="small"></i>
       </el-menu-item>
 
-      <el-menu-item v-for="(item,index) in menu" :index="item.index" :key="item.name">
+      <el-menu-item v-for="(item) in menu" :index="item.index" :key="item.name">
         <i :class='item.icon'></i>
         <span slot="title">{{item.name}}</span>
       </el-menu-item>

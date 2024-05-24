@@ -1,19 +1,41 @@
 import { Injectable } from '@nestjs/common';
+import { join, resolve } from 'path';
+import * as fs from 'fs'
+import * as https from 'https'
+
 //连接数据库
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '888',
-  database: 'chatroom'
-});
-connection.connect();
-
+var connection
+function handleError(err){
+	if(err){
+		// 如果断开连接，自动重连
+		if(err.code = 'PROTOCOL_CONNECTION_LOST'){
+			connect();
+		}
+    console.error(err.stack || err);
+	}
+}
+// 链接数据库
+function connect(){
+	connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '****',
+    database: 'chatroom'
+  });
+	connection.connect(handleError);
+	connection.on('error',handleError)
+}
+connect()
 //连接socket
 const express = require('express');
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
+//https证书
+const httpsOptions = {
+  key: fs.readFileSync(resolve('./certs/localhost-key.pem') ),
+  cert: fs.readFileSync(resolve('./certs/localhost.pem'))
+}
+const server = https.createServer(httpsOptions, app)
 const { Server } = require("socket.io");
 const io = new Server(server,{cors:true});
 const socketList = {}  //连接池
@@ -42,7 +64,7 @@ io.on('connection', (socket) => {
         messageType:msg.messageType,
       }) 
     } else {
-      socket.emit('error','your friend is not inline')
+      // socket.emit('error','your friend is not inline')
     }
     let id1 = Object.keys(usernameMap).find(item=>{
       return usernameMap[item] == msg.userName
@@ -103,9 +125,7 @@ io.on('connection', (socket) => {
     socketList[data.userName].emit('answer', data)
   })
 });
-server.listen(3030, () => {
-});
-
+server.listen(3030, () => {});
 
 @Injectable()
 export class AppService {

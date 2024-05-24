@@ -1,5 +1,6 @@
+const fs = require('fs')
+const path = require('path');
 const port = 8080; // dev port
-// All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   devServer: {
     port,
@@ -7,6 +8,10 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost-key.pem') ),
+      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost.pem'))
     },
   },
 };
