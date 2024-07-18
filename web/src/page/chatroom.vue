@@ -227,4 +227,24 @@ export default {
   transform: translateX(-100%);
   padding-right: 10px;
 }
+
+::v-deep .w-e-text img{
+  width: 150px;
+  height: auto;
+}
+::v-deep .w-e-toolbar{
+  z-index: 1 !important;
+}
+::v-deep .w-e-text-container{
+  height: 150px !important;
+  z-index: 1 !important;
+}
+::-webkit-scrollbar{
+  width:0;
+  height:6;
+}
+::v-deep .w-e-menu .w-e-panel-container{
+  top: -302px;
+  margin-left:0 !important;
+}
 </style>

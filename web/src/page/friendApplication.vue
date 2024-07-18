@@ -1,6 +1,6 @@
 <template>
   <!-- 好友申请页面 -->
-  <div id="addFriendsRequest">
+  <div id="addFriendsRequest" :class="isPc ? 'pcView' : 'phoneView'">
     <div class="requestList">
       <div class="hasnoData" v-if="requestList.length == 0">暂无数据</div>
       <div class="requestListItem" v-for="(item, index) in requestList" :key="index">
@@ -63,24 +63,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#addFriendsRequest {
+.pcView {
   width: 500px;
   height: 500px;
   border: 1px solid rgb(1, 228, 197);
   position: relative;
   left: 50px;
   top: 50px;
-  overflow-y: scroll;
-  padding: 0;
+  overflow: hidden;
 }
-.searchList {
-  box-sizing: border-box;
-  line-height: 40px;
-  width: 500px;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid rgb(212, 202, 202);
+.phoneView {
+  width: 100%;
+  height: 80%;
+  border: 1px solid rgb(1, 228, 197);
+  position: relative;
+  overflow: hidden;
 }
 .requestListItem{
     padding: 10px 30px;

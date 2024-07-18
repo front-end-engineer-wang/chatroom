@@ -1,5 +1,5 @@
 <template>
-  <div id="addFriend">
+  <div id="addFriend" :class="isPc ? 'pcView' : 'phoneView'">
     <div class="searchList">
       <span>用户名:</span>
       <el-input
@@ -28,6 +28,7 @@ export default {
     return {
       friendName: "",
       resultList: [],
+      isPc: window.innerWidth >= 767
     };
   },
   computed: {
@@ -79,13 +80,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#addFriend {
+.pcView {
   width: 500px;
   height: 500px;
   border: 1px solid rgb(1, 228, 197);
   position: relative;
   left: 50px;
   top: 50px;
+  overflow: hidden;
+}
+.phoneView {
+  width: 100%;
+  height: 80%;
+  border: 1px solid rgb(1, 228, 197);
+  position: relative;
   overflow: hidden;
 }
 .resultList{
@@ -95,7 +103,7 @@ export default {
 .searchList {
   box-sizing: border-box;
   line-height: 40px;
-  width: 500px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 10px;

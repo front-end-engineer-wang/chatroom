@@ -9,7 +9,7 @@
       active-text-color="rgb(44, 148, 189)"
       @select="changeMenu"
     >
-      <el-menu-item class="menu-null"></el-menu-item>
+      <el-menu-item v-if="isPc" class="menu-null"></el-menu-item>
       <el-menu-item index="1">私聊</el-menu-item>
       <el-menu-item index="2">聊天室</el-menu-item>
       <el-menu-item index="3">小游戏</el-menu-item>
@@ -28,13 +28,16 @@ const pathEunm = {
   '/chatroom':'2',
   '/creatChatroom':'2',
   '/fiveChess':'3',
+  '/myGpt':'3',
 }
+
 export default {
   data() {
     return {
       activeIndex: pathEunm[this.$route.path],
       name:localStorage.getItem("user_name"),
       img_url:`${this.BASEURL}/static/userImg/${localStorage.getItem("userid")}.png`,
+      isPc: window.innerWidth >= 767
     };
   },
   methods: {
@@ -81,6 +84,11 @@ export default {
             name: "五子棋",
             icon: "el-icon-s-home",
           },
+          // {
+          //   index: "/myGpt",
+          //   name: "gpt",
+          //   icon: "el-icon-s-home",
+          // },
         ];
         this.$store.commit("changeMenu", { menu });
       }

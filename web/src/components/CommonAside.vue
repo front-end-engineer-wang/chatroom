@@ -27,7 +27,7 @@
 export default {
   data() {
     return {
-      issmall: false,
+      issmall: window.innerWidth <= 767,
     };
   },
   computed: {

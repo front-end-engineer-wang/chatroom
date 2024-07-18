@@ -1,5 +1,5 @@
 <template>
-  <div id="singleTalk">
+  <div id="singleTalk" :class="isPc ? 'singleTalkPc' : 'singleTalkPhone'">
     <el-row style="height: 100%;">
       <el-col id="friendsList" :span="6">
         <ul>
@@ -13,7 +13,7 @@
             <li v-for="(item,index) in messageList[it]" style="display: block; margin: 3px 0 10px 0" :key="index">
               <div :class="item.sendPeople == userName ?'rightSide':'leftSide' ">
                 <img class="userImg" :src="friendimgSrc[activeFriend]" v-if="item.sendPeople != userName"/>
-                <span class="messageBox" v-if="item.messageType === 'text'">{{item.value}}</span>
+                <div class="messageBox" v-if="item.messageType === 'text'">{{item.value}}</div>
                 <span class="message-content-image" v-if="item.messageType === 'img'">
                   <viewer style="display:inline">
                     <img style="width:150px;height:150px" :src="item.value" alt="" />
@@ -21,7 +21,6 @@
                 </span>
                 <img class="userImg" :src="imgSrc" v-if="item.sendPeople == userName"/>
               </div>                                                            
-              <br>
             </li>
           </ul>
         </div>
@@ -59,7 +58,7 @@ export default {
       firstIn : true,
       imgSrc:'',
       friendimgSrc:[],
-      userid:'',
+      userid:localStorage.getItem('userid'),
       editor:{},
       //视频通话
       pc:'',
@@ -67,6 +66,7 @@ export default {
       isShowModalText:false,
       hasEmitOffer: false,
       hasEmitAnswer: false,
+      isPc: window.innerWidth >= 767
     };
   },
   created () {
@@ -187,6 +187,7 @@ export default {
         if(this.firstIn){
           this.getMessage()
           this.getFriendImg()
+          this.imgSrc = `${this.BASEURL}/static/userImg/${this.userid}.png`
           // api.getImg({id:this.userid+''}).then(res=>{
           //   this.imgSrc = 'data:image/jpg;base64,' + res.data[0] // base64方式，需要手动拼接前缀或者由后端拼好直接显示
           //   this.$bus.$emit('getImg',{src:this.imgSrc})
@@ -289,6 +290,7 @@ export default {
             sdp: pc.localDescription,
           })
           this.hasEmitOffer = true
+          this.isShowModalText = true
         }
       }
       pc.oniceconnectionstatechange = () => {
@@ -350,9 +352,14 @@ export default {
 
 <style lang="scss" scoped>
 
-#singleTalk{
+.singleTalkPhone{
+  height: 99%;
+  border: 1px solid rgb(26, 31, 1);
+}
+.singleTalkPc{
   height: 90%;
   margin: 24px;
+  margin-bottom: 0;
   border: 1px solid rgb(26, 31, 1);
 }
 #friendsList{
@@ -368,6 +375,8 @@ export default {
   .friendListItem{
     display: block;
     text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
     height: 55px;
     line-height: 55px;
   }
@@ -386,13 +395,13 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   .messageView{
-    max-height: calc(100vh - 335px);
+    max-height: calc(100vh - 280px);
     overflow-x: hidden;
     overflow-y: auto;
     flex: 5;
     .messageBox{
       position: relative;
-      top: -8px;
+      display: inline;
       padding: 5px 10px;
       background-color: rgb(0, 247, 255);
     } 
@@ -417,12 +426,13 @@ export default {
   }
 }
 .leftSide{
-  display: inline-block;
+  display: flex;
   position: relative;
   left: 2%;
 }
 .rightSide{
-  display: inline-block;
+  display: flex;
+  justify-content: flex-end;
   position: relative;
   left: 100%;
   transform: translateX(-100%);
@@ -432,16 +442,15 @@ export default {
   width: 30px;
   height: 30px;
 }
-</style>
-<style lang="scss">
-.w-e-text img{
+
+::v-deep .w-e-text img{
   width: 150px;
   height: auto;
 }
-.w-e-toolbar{
+::v-deep .w-e-toolbar{
   z-index: 1 !important;
 }
-.w-e-text-container{
+::v-deep .w-e-text-container{
   height: 150px !important;
   z-index: 1 !important;
 }
@@ -449,7 +458,7 @@ export default {
   width:0;
   height:6;
 }
-.w-e-menu .w-e-panel-container{
+::v-deep .w-e-menu .w-e-panel-container{
   top: -302px;
   margin-left:0 !important;
 }
@@ -480,5 +489,4 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 3;
 }
-
 </style>
