@@ -132,7 +132,7 @@ export default {
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 .register {
   background-image: url("../assets/bgc.jpeg");
   background-size: 100% 100%;
