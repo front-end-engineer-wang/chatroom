@@ -114,5 +114,6 @@ img {
 }
 .menu-user {
   float: right;
+  width: 115px;
 }
 </style>

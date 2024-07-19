@@ -1,7 +1,7 @@
 <template>
   <div id="addFriend" :class="isPc ? 'pcView' : 'phoneView'">
     <div class="searchList">
-      <span>用户名:</span>
+      <span v-if="isPc" class="overEl">用户名:</span>
       <el-input
         v-model="friendName"
         style="width: 70%"
@@ -128,5 +128,9 @@ export default {
   font-size: 20px;
   border: 1px solid rgb(9, 190, 181);
   border-radius: 50%;
+}
+.overEl{
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

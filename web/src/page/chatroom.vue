@@ -1,5 +1,5 @@
 <template>
-  <div id="roomTalk">
+  <div id="roomTalk" :class="isPc ? 'singleTalkPc' : 'singleTalkPhone'"> 
     <el-row style="height: 100%">
       <el-col id="roomList" :span="6">
         <ul>
@@ -53,6 +53,7 @@ export default {
       imgSrc: "",
       roomimgSrc: [],
       userid: "",
+      isPc: window.innerWidth >= 767
     };
   },
   methods: {
@@ -145,12 +146,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#roomTalk {
-  height: 90%;
-  margin: 24px;
+.singleTalkPhone{
+  height: 99%;
   border: 1px solid rgb(26, 31, 1);
 }
-
+.singleTalkPc{
+  height: 90%;
+  margin: 24px;
+  margin-bottom: 0;
+  border: 1px solid rgb(26, 31, 1);
+}
 #roomList {
   border-right: 1px solid rgb(26, 31, 1);
   height: 100%;
@@ -158,13 +163,18 @@ export default {
   .roomListTitle {
     display: block;
     text-align: center;
+    height: 50px;
+    line-height: 50px;
+    background-color: rgba(14, 170, 175, 0.822);
   }
 
   .roomListItem {
     display: block;
     text-align: center;
-    height: 35px;
-    line-height: 35px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 55px;
+    line-height: 55px;
   }
 
   .roomListItem:hover {

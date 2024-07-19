@@ -1,6 +1,6 @@
 <template>
   <!-- 新建聊天室页面 -->
-  <div id="addChatRoom">
+  <div id="addChatRoom" :class="isPc ? 'pcView' : 'phoneView'">
     <div class="friendList">
       <div class="hasnoData" v-if="friendList.length == 0">暂无数据</div>
       <div style="padding-top:10px">
@@ -32,6 +32,7 @@ export default {
       optionList: {},
       checkList:[],//选中的好友
       chatRoomName:'', //聊天室名称
+      isPc: window.innerWidth >= 767
     };
   },
   mounted () {
@@ -76,13 +77,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#addChatRoom {
+.pcView {
   width: 500px;
   height: 500px;
   border: 1px solid rgb(1, 228, 197);
   position: relative;
   left: 50px;
   top: 50px;
+}
+.phoneView {
+  width: 100%;
+  height: 80%;
+  border: 1px solid rgb(1, 228, 197);
+  position: relative;
 }
 .el-input{
   width: 300px;

@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       requestList: [],
+      isPc: window.innerWidth >= 767
     };
   },
   mounted () {
